@@ -35,6 +35,8 @@ class Handler(BaseHTTPRequestHandler):
                 page = int(query.get("page", [""])[0])
                 if not 1 <= page <= 603:
                     raise ValueError("شماره صفحه باید بین ۱ تا ۶۰۳ باشد.")
+                if page % 2 == 0:
+                    raise ValueError("فقط صفحات فرد قرآن قابل باز شدن هستند.")
 
                 with open(DATA_FILE, encoding="utf-8") as f:
                     database = json.load(f)
