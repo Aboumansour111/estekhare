@@ -44,11 +44,11 @@ footer{text-align:center;color:#738074;font-size:12px;padding:15px}
 <main>
 <header>
 <h1>استخاره دستی با قرآن</h1>
-<div>نیت کنید و سپس صفحه‌ای از کتاب را انتخاب کنید</div>
+<div>نیت کنید و فقط یکی از صفحات فرد قرآن را انتخاب کنید</div>
 </header>
 
 <section>
-<p class="intro">برای انتخاب صفحه، روی لبه‌های کتاب کلیک کنید یا انگشت خود را روی آن بکشید.</p>
+<p class="intro">برای انتخاب صفحه، روی کتاب کلیک کنید یا انگشت خود را روی آن بکشید؛ فقط صفحات فرد قابل انتخاب هستند.</p>
 <div class="book-area">
 <div class="book" id="book" role="slider" tabindex="0"
  aria-label="انتخاب صفحه قرآن" aria-valuemin="1" aria-valuemax="603" aria-valuenow="165">
@@ -56,7 +56,7 @@ footer{text-align:center;color:#738074;font-size:12px;padding:15px}
 </div>
 <div class="selection">صفحه انتخاب‌شده: <strong id="pageNo">۱۶۵</strong> از ۶۰۳</div>
 <div class="actions"><button id="go">مشاهده نتیجه استخاره</button></div>
-<div class="hint">می‌توانید روی بخش‌های مختلف کتاب کلیک کنید تا صفحه دلخواه انتخاب شود.</div>
+<div class="hint">انتخاب به نزدیک‌ترین صفحه فرد تنظیم می‌شود؛ صفحات زوج قابل باز شدن نیستند.</div>
 </div>
 <p id="status" role="status"></p>
 </section>
@@ -77,7 +77,10 @@ function digits(n) {
 }
 
 function setPage(n) {
-  selected = Math.max(1, Math.min(603, Math.round(n)));
+  n = Math.max(1, Math.min(603, Math.round(n)));
+  // Only odd-numbered Quran pages can be selected.
+  if (n % 2 === 0) n = n === 604 ? 603 : n - 1;
+  selected = n;
   pageNo.textContent = digits(selected);
   book.setAttribute('aria-valuenow', selected);
   indicator.style.left = (1 - (selected - 1) / 602) * 100 + '%';
@@ -117,10 +120,10 @@ book.addEventListener('pointercancel', () => {
 book.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft') {
     e.preventDefault();
-    setPage(selected + 1);
+    setPage(selected + 2);
   } else if (e.key === 'ArrowRight') {
     e.preventDefault();
-    setPage(selected - 1);
+    setPage(selected - 2);
   } else if (e.key === 'Enter') {
     e.preventDefault();
     openResult();
